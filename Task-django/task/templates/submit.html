@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block title %}Submission Successful{% endblock %}
+
+{% block content %}
+<p>Thank you, {{ name }}! Your submission with the email {{ email }} has been received.</p>
+<a href="{% url 'index' %}">
+    <button type="button">Go Back to Home</button>
+</a>
+{% endblock %}

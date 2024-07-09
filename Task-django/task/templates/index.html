@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<p>Current time: <span id="current-time">{{ time }}</span></p>
+<p id="quote"></p>
+<form action="{% url 'submit' %}" method="post">
+    {% csrf_token %}
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" value="{{ name|default_if_none:'' }}">
+    {% if errors.name %}
+        <span style="color: red;">{{ errors.name }}</span>
+    {% endif %}
+    <br>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" value="{{ email|default_if_none:'' }}">
+    {% if errors.email %}
+        <span style="color: red;">{{ errors.email }}</span>
+    {% endif %}
+    <br>
+    <button type="submit">Submit</button>
+</form>
+<form action="{% url 'submissions' %}" method="get">
+    <button type="submit">View Submissions</button>
+</form>
+
+<script>
+    // Function to update time
+    function updateTime() {
+        var now = new Date();
+        var formattedTime = now.getFullYear() + '-' + 
+            String(now.getMonth() + 1).padStart(2, '0') + '-' +
+            String(now.getDate()).padStart(2, '0') + ' ' +
+            String(now.getHours()).padStart(2, '0') + ':' +
+            String(now.getMinutes()).padStart(2, '0') + ':' +
+            String(now.getSeconds()).padStart(2, '0');
+        document.getElementById('current-time').textContent = formattedTime;
+    }
+    setInterval(updateTime, 1000);
+    updateTime();  // initial call to set the time immediately
+
+    // Rotating quotes
+    const quotes = [
+        "The only limit to our realization of tomorrow is our doubts of today. - Franklin D. Roosevelt",
+        "The future belongs to those who believe in the beauty of their dreams. - Eleanor Roosevelt",
+        "Do not watch the clock. Do what it does. Keep going. - Sam Levenson",
+        "Keep your face always toward the sunshine—and shadows will fall behind you. - Walt Whitman",
+        "The best way to predict the future is to invent it. - Alan Kay"
+    ];
+    let currentQuoteIndex = 0;
+
+    function showNextQuote() {
+        document.getElementById('quote').textContent = quotes[currentQuoteIndex];
+        currentQuoteIndex = (currentQuoteIndex + 1) % quotes.length;
+    }
+    setInterval(showNextQuote, 5000);
+    showNextQuote();  // initial call to show the first quote immediately
+</script>
+{% endblock %}

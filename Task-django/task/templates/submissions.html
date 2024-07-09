@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Submissions{% endblock %}
+
+{% block content %}
+<ul>
+    {% for submission in submissions %}
+        <li>{{ submission.name }} - {{ submission.email }} - {{ submission.submitted_at }} 
+            <form action="{% url 'delete_submission' submission.id %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit">Delete</button>
+            </form>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}
